@@ -45,6 +45,7 @@ function Circle(cx, cy, html_id, size){
 
         el.setAttribute("cx", this.info.cx);
         el.setAttribute("cy", this.info.cy);
+        el.setAttribute("style", "fill: green");
     }
 
     //creates the SVG element and returns it
@@ -85,13 +86,25 @@ function PlayGround(){
 if (document.readyState) {
     document.getElementById('svg').setAttribute("height", (window.innerHeight-20) + "px");
     document.getElementById('svg').setAttribute("width", window.innerWidth + "px");
-    
-}
+ 
+    var playground = new PlayGround();
+    setInterval(playground.loop, 15); // Call the loop very 15ms
 
-var playground = new PlayGround();
-setInterval(playground.loop, 15);
+    document.onclick = function(e) {
+        var size = 10 + Math.floor(time_pressed / 500) * 10;
+        playground.createNewCircle(e.x, e.y, size);
+    }
 
-document.onclick = function(e) {
-    playground.createNewCircle(e.x, e.y, 20);
+    var mousedown_time, time_pressed;
+    function getTime(){
+        var date = new Date();
+        return date.getTime();
+    }
+    document.onmousedown = function(e){
+        mousedown_time = getTime();
+    }
+    document.onmouseup = function(e){
+        time_pressed = getTime() - mousedown_time;
+    }
 }
 
